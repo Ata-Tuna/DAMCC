@@ -1,0 +1,71 @@
+[tool.poetry]
+name = "brainiac-temporal"
+version = "1.0.0"
+description = ""
+authors = ["Euranova <research@euranova.eu>"]
+license = "LICENSE"
+readme = "README.md"
+packages = [{ include = "brainiac_temporal", from = "src" }]
+
+[tool.poetry.dependencies]
+python = ">=3.8,<3.11"
+loguru = { version = "*", source = "pypi" }
+ipykernel = { version = "^6.15.0", source = "pypi" }
+jupyter = { version = "^1.0.0", source = "pypi" }
+pyrootutils = { version = "*", source = "pypi" }
+scikit-learn = { version = "^1.3.0", source = "pypi" }
+numpy = { version = "^1.20.0", source = "pypi" }
+seaborn = { version = "^0.11.2", source = "pypi" }
+statsmodels = {version = "0.14.0", source = "pypi"}
+pytorch-lightning = { version = "1.9.1", source = "pypi" }
+torchmetrics = "^1.1.1"
+torch = [
+    { url = "https://download.pytorch.org/whl/cu113/torch-1.12.1%2Bcu113-cp38-cp38-linux_x86_64.whl", platform = "linux" },
+    { version = "^2.0.0", platform = "darwin" },
+]
+ninja = { version = "*", platform = "darwin" }
+pyg-lib = [
+    { version = "^0.2.0+pt112cu113", source = "torch-wheels", platform = "linux" },
+    { git = "https://github.com/pyg-team/pyg-lib.git", platform = "darwin" },
+]
+torch-scatter = [{ version = "^2.1.0+pt112cu113", source = "torch-wheels", platform = "linux" }]
+torch-sparse = [{ version = "^0.6.16+pt112cu113", source = "torch-wheels", platform = "linux" }]
+torch-cluster = [{ version = "^1.6.0+pt112cu113", source = "torch-wheels", platform = "linux" }]
+torch-spline-conv = [{ version = "^1.2.1+pt112cu113", source = "torch-wheels", platform = "linux" }]
+torch-geometric-temporal = "^0.54.0"
+dtaidistance = "^2.3.10"
+igraph = "^0.11.2"
+optuna = "^3.4.0"
+
+[tool.poetry.dev-dependencies]
+cython = "^0.29.33"
+black = { version = "^22.6.0", extras = ["jupyter"], source = "pypi" }
+mypy = { version = "^0.961", source = "pypi" }
+typeguard = { version = "2.13.3", source = "pypi" }
+pylint = { version = "^2.14.4", source = "pypi" }
+pytest = { version = "^7.1.2", source = "pypi" }
+pytest-xdist = { version = "^2.5.0", source = "pypi" }
+pytest-pylint = { version = "^0.18.0", source = "pypi" }
+pytest-mypy = { version = "^0.9.1", source = "pypi" }
+pytest-cov = { version = "^3.0.0", source = "pypi" }
+nbmake = { version = "^1.0.0", source = "pypi" }
+
+[[tool.poetry.source]]
+name = "torch-wheels"
+url = "https://data.pyg.org/whl/torch-1.12.1+cu113.html"
+priority = "explicit"
+
+[[tool.poetry.source]]
+name = "pytorch"
+url = "https://download.pytorch.org/whl/cu113"
+priority = "explicit"
+
+[build-system]
+requires = ["setuptools>=42", "wheel",  "setuptools_scm"]
+build-backend = "setuptools.build_meta"
+
+[tool.black]
+line-length = 88
+
+[tool.setuptools_scm]
+version_scheme = "post-release"

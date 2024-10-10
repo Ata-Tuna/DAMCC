@@ -1,0 +1,66 @@
+### **
+###  * Copyright (C) Euranova - All Rights Reserved 2024
+###  * 
+###  * This source code is protected under international copyright law.  All rights
+###  * reserved and protected by the copyright holders.
+###  * This file is confidential and only available to authorized individuals with the
+###  * permission of the copyright holders.  If you encounter this file and do not have
+###  * permission, please contact the copyright holders and delete this file at 
+###  * research@euranova.eu
+###  * It may only be used for academic research purposes as authorized by a written
+###  * agreement issued by Euranova. 
+###  * Any commercial use, redistribution, or modification of this software without 
+###  * explicit written permission from Euranova is strictly prohibited. 
+###  * By using this software, you agree to abide by the terms of this license. 
+###  **
+version: "3.8"
+
+x-common-variables: &common-variables
+  LOCAL_USER_ID: ${LOCAL_USER_ID}
+  LOCAL_USER: ${LOCAL_USER}
+  NVIDIA_VISIBLE_DEVICES: all
+
+services:
+
+  dev-container:
+    image: ${IMAGE}
+    container_name: brainiac-temporal-dev-${UNIQUE-0}
+    entrypoint: /workdir/scripts/entrypoint.sh
+    # Overrides default command so things don't shut down after the process ends.
+    command: /bin/sh -c "while sleep 1000; do :; done"
+    volumes:
+      - ./:/workdir
+    environment:
+      <<: *common-variables
+
+  notebook:
+    image: ${IMAGE}
+    container_name: brainiac-temporal-notebook-${UNIQUE-0}
+    entrypoint: /workdir/scripts/entrypoint.sh
+    command: /${PROJECT_NAME}/bin/python -m jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.token='' --NotebookApp.password=''
+    ports: #server:container
+      - "${PORT_JUPY-8888}:8888"
+    volumes:
+      - ./:/workdir
+    environment:
+      <<: *common-variables
+    runtime: nvidia
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              capabilities: [gpu]
+              device_ids: ['0']
+
+  tensorboard:
+    image: ${IMAGE}
+    container_name: brainiac-temporal-tensorboard-${UNIQUE-0}
+    entrypoint: /workdir/scripts/entrypoint.sh
+    command: "tensorboard --logdir=tensorboard --port=6006 --host 0.0.0.0"
+    ports:
+      - "${PORT_TB-6006}:6006" #server:container
+    volumes:
+      - ./:/workdir
+    environment: *common-variables
+
